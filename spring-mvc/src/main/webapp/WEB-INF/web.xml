@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <display-name>spring-mvc</display-name>
+  
+  
+  <servlet>
+   <servlet-name>dispatcher</servlet-name>
+   <servlet-class>
+     org.springframework.web.servlet.DispatcherServlet
+   </servlet-class>
+   <!-- <init-param>
+     <param-name>contextConfigLocation</param-name>
+     <param-value>/WEB-INF/spring/dispatcher-config.xml</param-value>
+   </init-param> -->
+   <load-on-startup>1</load-on-startup>
+ </servlet>
+
+ <servlet-mapping>
+   <servlet-name>dispatcher</servlet-name>
+   <url-pattern>*.html</url-pattern>
+     <url-pattern>*.htm</url-pattern>
+       <url-pattern>*.json</url-pattern>
+         <url-pattern>*.xml</url-pattern>
+ </servlet-mapping>
+ 
+ <listener>
+  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+
+<filter>
+  <filter-name>springSecurityFilterChain</filter-name>
+  <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+</filter>
+
+<filter-mapping>
+  <filter-name>springSecurityFilterChain</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>
+      
+<!-- <context-param>
+  <param-name>contextConfigLocation</param-name>
+  <param-value>/WEB-INF/applicationContext*.xml</param-value>
+</context-param> -->
+
+<!--  This is easy way to avoid Lazy Initialization exception which is caused due to mapping of one Entity 
+with other Entity where hibernate does not load the mapped entity along with the parent entity
+in this case User and Blog and Item are mapped to each other but it loads only User not the other two.
+
+<filter>
+<filter-name>oemInViewFilter</filter-name>
+<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+<init-param>
+<param-name>entityManagerFactoryBeanName</param-name>
+<param-value>emf</param-value>
+</init-param>
+</filter>
+<filter-mapping>
+<filter-name>oemInViewFilter</filter-name>
+<url-pattern>/*</url-pattern>
+</filter-mapping> -->
+
+</web-app>
