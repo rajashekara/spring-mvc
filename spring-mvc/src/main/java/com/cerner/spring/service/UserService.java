@@ -63,11 +63,18 @@ public class UserService {
 			BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
 			user.setPassword(encoder.encode(user.getPassword()));
 			List<Role> roles=new ArrayList<Role>();
-			roles.add(roleRepository.findByName("ROLE_ADMIN"));
+			List<Role> roles1=roleRepository.findByName("ROLE_USER");
+			roles.add(roles1.get(0));
 		
 			user.setRoles(roles);
 			userRepository.save(user);
 			userRepository.flush();
 			
+		}
+
+		public User findOneWithBlogs(String name) {
+			User user=userRepository.findByName(name);
+			
+			return findOneWithBlogs(user.getId());
 		}
 }

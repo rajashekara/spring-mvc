@@ -1,15 +1,18 @@
 package com.cerner.spring.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.cerner.spring.model.Blog;
 import com.cerner.spring.model.User;
+import com.cerner.spring.service.BlogService;
 import com.cerner.spring.service.UserService;
 
 @Controller
@@ -17,6 +20,9 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BlogService blogService;
 	
 	@RequestMapping("/users")
 	public String users(Model model)
@@ -33,9 +39,15 @@ public class UserController {
 	}
 	
 	@ModelAttribute("user")
-	public User construct()
+	public User constructUser()
 	{
 		return new User();
+	}
+	
+	@ModelAttribute("blog")
+	public Blog constructBlog()
+	{
+		return new Blog();
 	}
 	@RequestMapping("/register")
 	public String showRegister()
@@ -46,6 +58,22 @@ public class UserController {
 	public String doRegister(@ModelAttribute User user)
 	{
 		userService.save(user);
-		return "user-register";
+		return "redirect:/register.html?success=true";
+	}
+	
+	@RequestMapping("/account")
+	public String account(Model model, Principal principal)
+	{
+		String name=principal.getName();
+		model.addAttribute("user", userService.findOneWithBlogs(name));
+		return "user-detail";
+	}
+	
+	@RequestMapping(value="/account",method=RequestMethod.POST)
+	public String doAddBlog(@ModelAttribute Blog blog,Principal principal)
+	{
+		String name=principal.getName();
+		blogService.save(blog,name);
+		return "redirect:/account.html";
 	}
 }
