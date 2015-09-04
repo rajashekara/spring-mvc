@@ -8,7 +8,7 @@
 	data-target="#myModal">New Blog</button>
 <!-- Modal -->
 <form:form commandName="blog" cssClass="form-horizontal">
-	<div id="myModal" tabindex="-1" role="dialog"
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
